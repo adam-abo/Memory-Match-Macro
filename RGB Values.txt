@@ -1,0 +1,32 @@
+Cyan Border Stickers:Empty
+Sideways Spirit Bear Stickers:Empty
+Tickets:(247,222,193)
+Gumdrops:(92,193,136)
+Coconuts:(52,41,26)
+Stingers:(184,215,219)
+Micro-Converters:(190,201,83)
+Field Dice:(183,183,183)
+Jellybeans:(152,188,243)
+Red Extracts:(207,73,67)
+Blue Extracts:(53,72,138)
+Glitter:(198,219,216)
+Glue:Empty
+Oils:(93,53,29)
+Enzymes:(247,247,178)
+Tropical Drinks:Empty
+Magic Beans:(146,192,118)
+Cloud Vials:Empty
+Night Bells:Empty
+Treats:(225,220,205)
+Star Treats:Empty
+Sunflower Seeds:(225,222,193)
+Strawberries:(216,72,65)
+Pineapples:(254,250,178)
+Blueberries:(54,94,144)
+Moon Charms:(58,57,56)
+Royal Jellies:(136,99,163)
+Star Jellies:(216,72,65)
+Gold Eggs:Empty
+Diamond Eggs:Empty
+Star Eggs:Empty
+Mythic Eggs:Empty
