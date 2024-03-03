@@ -126,21 +126,20 @@ def quantify(img):
         return 1
     
 def itemsMatched(items):
-    items.sort()
-    matched = []
+    matches = []
     for item in items:
         if item[4]:
-            matched.append(item[:4])      
-    matched.sort()
-    matched = matched[::2]
+            matches.append(item[:4])      
+    matches.sort()
+    matches = matches[::2]
     
-    for item in matched:
-        if matched.count(item) == 2:
-            matched.remove(item)
-            matched[matched.index(item)] = item[:3] + (item[3]*2,)
+    for item in matches:
+        if matches.count(item) == 2:
+            matches.remove(item)
+            matches[matches.index(item)] = item[:3] + (item[3]*2,)
             break
-    print(matched)
-    return matched
+    print(matches)
+    return matches
 
 def save_board(initialPos, final_pix):
     t = time.time()
@@ -161,7 +160,7 @@ def save_board(initialPos, final_pix):
     while os.path.exists(os.path.join(path, nameC + '.png')):
         nameC = f"{name}_{counter}"
         counter += 1
-    img.save(os.path.join(path, name + '.png'))
+    img.save(path + nameC + '.png')
 
 def play(type, chances = 12, initialPos = (1999, 1019)):
     currentTile = 0
