@@ -10,7 +10,7 @@ def initialize():
     if 'Memory Match' in text:
                
         pag.press('e')
-        time.sleep(2.5)
+        time.sleep(2)
         pag.press('\\')
         pag.press('a')
         pag.press('a')
@@ -43,8 +43,8 @@ def nextTile(currentTile):
 def beginMatch(tiles, currentTile, chances):
     foundTile = tiles.index(tiles[currentTile])
 
-    tiles[currentTile][4] = 1
-    tiles[foundTile][4] = 1
+    tiles[currentTile] = tiles[currentTile][:4] + (True,)
+    tiles[foundTile] = tiles[foundTile][:4] + (True,)
 
     if chances % 2 == 1:
         chances -= 1
@@ -104,12 +104,12 @@ def recognize(currentTile, initialPos):
 
     while (ImageGrab.grab(bbox=(scaled_x, scaled_y, scaled_x+1, scaled_y+1))).getpixel((0,0))[:3] == (170, 130, 73):
         if time.time() - t > 7:
-            print('Error: tile ' + currentTile+1 + ' has not flipped')
+            print('Error: tile ' + str(currentTile) + ' has not flipped')
             exit()
 
     time.sleep(0.15) 
     img = ImageGrab.grab()
-    return img.getpixel((x, y))[:3] + (quantify(img.crop((x-35, y+15, x+50, y+50))), 0)
+    return img.getpixel((x, y))[:3] + (quantify(img.crop((x-35, y+15, x+50, y+50))), False)
 
 def quantify(img):
     for x in range(85):
@@ -123,6 +123,22 @@ def quantify(img):
         return int(text[text.find('x') + 1:])
     else:
         return 1
+    
+def itemsMatched(items):
+    items.sort()
+    matched = []
+    for item in items:
+        if item[4]:
+            matched.append(item[:4])      
+    matched.sort()
+    matched = matched[::2]
+    
+    for item in matched:
+        if matched.count(item) == 2:
+            matched.remove(item)
+            matched[matched.index(item)] = item[:3] + (item[3]*2,)
+            break
+    return matched
 
 def play(type, chances = 12, initialPos = (1999, 1019)):
     currentTile = 0
@@ -142,8 +158,8 @@ def play(type, chances = 12, initialPos = (1999, 1019)):
             currentImage = recognize(currentTile, initialPos)
             tiles.append(currentImage)
         else:
-            tiles[dupes[0]] = 'Match' + str(tiles[dupes[0]])
-            tiles[dupes[1]] = 'Match' + str(tiles[dupes[1]])
+            tiles[dupes[0]] = tiles[dupes[0]][:4] + (True,)
+            tiles[dupes[1]] = tiles[dupes[1]][:4] + (True,)
             matchDupe(dupes[0], dupes[1], currentTile-1)
             break
         
@@ -162,11 +178,11 @@ def play(type, chances = 12, initialPos = (1999, 1019)):
     scaled_y = (initialPos[1] + 480) // 2
     while ImageGrab.grab(bbox=(scaled_x, scaled_y, scaled_x+1, scaled_y+1)).getpixel((0,0))[:3] == (170, 130, 73):
         if time.time() - t > 7:
+            print('Game was thought to end.')
             exit()
 
     time.sleep(0.1)
     img = ImageGrab.grab()
     img.save("/Users/adamabouelela/Desktop/final_board.png")
     pag.press('\\')
-    print(dupes)
-    return(tiles)
+    return itemsMatched(tiles)

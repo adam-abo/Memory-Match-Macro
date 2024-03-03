@@ -1,28 +1,19 @@
-import testing
-import pyautogui as pag
-import time
+def itemsMatched(items):
+    items.sort()
+    matched = []
+    for item in items:
+        if item[4]:
+            matched.append(item[:4])
+    matched.sort()
+    matched = matched[::2]
+    
+    for item in matched:
+        if matched.count(item) == 2:
+            matched.remove(item)
+            matched[matched.index(item)] = item[:3] + (item[3]*2,)
+            break
+    return matched
 
-def hallo():
-    known_items = testing.identify()
-    collected = {}
-    board = [(207, 73, 67, 3), ]
-
-    for item in board:
-        if item[4] == 1:
-            quantity = item[3]
-            item = item[:3]
-
-            if str(item) in known_items and item not in collected:
-                item = known_items[str(item)]
-                if item in collected:
-                    collected[item] += quantity
-                else:
-                    collected[item] = 0
-            else:
-                collected[item] = 0
-    print(collected)
-
-time.sleep(3)
-for _ in range(2):
-    pag.press('d')
-pag.press('enter')
+tiles = [(216, 72, 65, 25, 1), (136, 99, 163, 3, 1), (136, 99, 163, 3, 1), (183, 183, 183, 2, 1), (136, 99, 163, 3, 1), (216, 72, 65, 25, 1), (183, 183, 183, 2, 1), (136, 99, 163, 3, 1)]
+print(tiles)
+print(itemsMatched(tiles))

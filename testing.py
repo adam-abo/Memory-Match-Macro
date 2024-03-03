@@ -1,6 +1,6 @@
 def identify():
     items = {}
-    with open('/Users/adamabouelela/Desktop/mm_macro_folder/RGB Values.txt', 'r') as file:
+    with open('/Users/adamabouelela/Desktop/Memory-Match-Macro/RGB Values.txt', 'r') as file:
         # Read each line in the file
         for line in file:
             # Split the line by colon ':' to separate key and value
@@ -28,5 +28,23 @@ def writeSummary(items, games):
             f.write('{\\listtext	\\uc0\\u8259 	}' + f'{key}: {value}' + '\\\n')
 
         f.write('\\pard\\tx566\\tx1133\\tx1700\\tx2267\\tx2834\\tx3401\\tx3968\\tx4535\\tx5102\\tx5669\\tx6236\\tx6803\\sl360\\slmult1\\pardirnatural\\partightenfactor0\n\\cf0 }')
-    
-print(identify())
+
+
+known_items = {'(247,222,193)': 'Tickets', '(92,193,136)': 'Gumdrops', '(53,72,138)': 'Coconuts'}
+collected = {}
+board = [(247,222, 193, 3, 1), (53, 72,138, 3, 1), (198,219,216,1,1), (53, 72,138, 3, 1), (198,219,216,2,1)]
+
+for item in board:
+    if item[4] == 1:
+        quantity = item[3]
+        item = item[:3]
+
+        if str(item).replace(' ', '') in known_items:
+            item = known_items[str(item).replace(' ', '')]
+
+        if item in collected:
+            collected[item] += quantity
+        else:
+            collected[item] = quantity
+
+print(collected)
