@@ -1,6 +1,7 @@
 # Main Gameplay Loop (pixel matching and tile movement)
 
 import time
+import os
 import pyautogui as pag
 from PIL import ImageGrab
 from pytesseract import image_to_string
@@ -138,7 +139,29 @@ def itemsMatched(items):
             matched.remove(item)
             matched[matched.index(item)] = item[:3] + (item[3]*2,)
             break
+    print(matched)
     return matched
+
+def save_board(initialPos, final_pix):
+    t = time.time()
+    scaled_x = (initialPos[0] + 480 + final_pix) // 2
+    scaled_y = (initialPos[1] + 480) // 2
+    while ImageGrab.grab(bbox=(scaled_x, scaled_y, scaled_x+1, scaled_y+1)).getpixel((0,0))[:3] == (170, 130, 73):
+        if time.time() - t > 7:
+            print('Game was thought to end.')
+            exit()
+
+    time.sleep(0.1)
+    img = ImageGrab.grab().crop((1450, 845, 2850, 1675))
+    name = 'board'
+    nameC = name
+    path = "/Users/adamabouelela/Desktop/Memory-Match-Macro/Boards/"
+    counter = 1
+
+    while os.path.exists(os.path.join(path, nameC + '.png')):
+        nameC = f"{name}_{counter}"
+        counter += 1
+    img.save(os.path.join(path, name + '.png'))
 
 def play(type, chances = 12, initialPos = (1999, 1019)):
     currentTile = 0
@@ -173,16 +196,6 @@ def play(type, chances = 12, initialPos = (1999, 1019)):
             chances = beginMatch(tiles, currentTile, chances)
         currentTile += 1
 
-    t = time.time()
-    scaled_x = (initialPos[0] + 480 + final_pix) // 2
-    scaled_y = (initialPos[1] + 480) // 2
-    while ImageGrab.grab(bbox=(scaled_x, scaled_y, scaled_x+1, scaled_y+1)).getpixel((0,0))[:3] == (170, 130, 73):
-        if time.time() - t > 7:
-            print('Game was thought to end.')
-            exit()
-
-    time.sleep(0.1)
-    img = ImageGrab.grab()
-    img.save("/Users/adamabouelela/Desktop/final_board.png")
+    save_board(initialPos, final_pix)
     pag.press('\\')
     return itemsMatched(tiles)

@@ -1,16 +1,22 @@
 import time
 import memory_match
+import testing
 
+collected = {}
 time.sleep(3)
 type = memory_match.initialize()
 
 if type:
     if type > 2:
-        print(memory_match.play(type))
+        items = memory_match.play(type)
     else:
-        print(memory_match.play(type, 16, (1919, 1019)))
+        items = memory_match.play(type, 16, (1919, 1019))
+
+    collected = testing.identify(items, collected)
 else:
     print('Not Found')
+    
+print(collected)
 
 # Add CD <-- This next?
 # Add outside loop
