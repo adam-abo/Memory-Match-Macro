@@ -8,10 +8,10 @@ from pytesseract import image_to_string
 
 def initialize():
     text = image_to_string(ImageGrab.grab(bbox=(1020, 71, 1295, 100)).convert('L'))
-    if 'Memory Match' in text:
+    if 'Memory Match' in text and not ':' in text:
                
         pag.press('e')
-        time.sleep(2)
+        time.sleep(3)
         pag.press('\\')
         pag.press('a')
         pag.press('a')
@@ -199,7 +199,6 @@ def play(type, chances = 12, initialPos = (1999, 1019)):
             chances = beginMatch(tiles, currentTile, chances)
 
         currentTile += 1
-        print(tiles)
 
     save_board(initialPos, final_pix)
     pag.press('\\')

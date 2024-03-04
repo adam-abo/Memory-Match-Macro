@@ -6,7 +6,7 @@ import pyautogui as pag
 time.sleep(3)
 collected = {}
 
-for i in range(1):
+for i in range(4):
     type = memory_match.initialize()
     if type:
         if type > 2:
@@ -19,7 +19,7 @@ for i in range(1):
     else:
         print('Not Found')
 
-    if i != 0:
+    if i != 3:
         for _ in range(8):
             time.sleep(15*60)
             pag.press('1')
