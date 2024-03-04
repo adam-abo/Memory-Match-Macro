@@ -1,6 +1,6 @@
 Cyan Border Stickers:Empty
 Sideways Spirit Bear Stickers:Empty
-Tickets:(247,222,193)
+Tickets:(247,213,82)
 Gumdrops:(92,193,136)
 Coconuts:(52,41,26)
 Stingers:(184,215,219)
@@ -25,7 +25,7 @@ Pineapples:(254,250,178)
 Blueberries:(54,94,144)
 Moon Charms:(58,57,56)
 Royal Jellies:(136,99,163)
-Star Jellies:(216,72,65)
+Star Jellies:(249,236,175)
 Gold Eggs:Empty
 Diamond Eggs:Empty
 Star Eggs:Empty

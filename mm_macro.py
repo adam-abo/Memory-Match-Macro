@@ -3,11 +3,10 @@ import memory_match
 import testing
 import pyautogui as pag
 
-collected = {}
-current_collected = {}
 time.sleep(3)
+collected = {}
 
-for i in range(4):
+for i in range(1):
     type = memory_match.initialize()
     if type:
         if type > 2:
@@ -15,22 +14,15 @@ for i in range(4):
         else:
             items = memory_match.play(type, 16, (1919, 1019))
 
-        current_collected = testing.identify(items, current_collected)
-        print(current_collected)
-        for item in current_collected:
-            if item[:3] in collected:
-                collected[item[:3]] += item[3]
-            else:
-                collected[item[:3]] = item[3]
+        collected = testing.identify(items, collected)
+        print(collected)
     else:
         print('Not Found')
 
-    if i != 3:
+    if i != 0:
         for _ in range(8):
             time.sleep(15*60)
             pag.press('1')
-
-print(collected)
 
 # Add CD <-- This next?
 # Add outside loop
