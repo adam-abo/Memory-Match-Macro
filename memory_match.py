@@ -149,7 +149,7 @@ def save_board(initialPos, final_pix):
             exit()
 
     time.sleep(0.1)
-    img = ImageGrab.grab().crop((1500, 850, 2800, 1650))
+    img = ImageGrab.grab().crop((1550, 850, 2750, 1650))
     name = 'board'
     nameC = name
     path = "/Users/adamabouelela/Desktop/Memory-Match-Macro/Boards/"
@@ -186,6 +186,9 @@ def play(type, chances = 12, initialPos = (1999, 1019)):
         if currentImage == tiles[currentTile-1] and chances % 2 == 0:
             tiles[currentTile] = tiles[currentTile][:4] + (True,)
             tiles[currentTile-1] = tiles[currentTile-1][:4] + (True,)
+            if currentImage[:3] == dupePot:
+                dupes = []
+                dupePot = False
 
         elif currentImage[:3] == dupePot and chances > 2:
                 dupes.append(currentTile)
