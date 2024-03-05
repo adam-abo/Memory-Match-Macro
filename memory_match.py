@@ -18,17 +18,17 @@ def initialize():
         pag.press('s')
 
         if 'Extreme' in text:
-            return 'Extreme'
+            return 'Extreme', 32
         elif 'Winter' in text:
-            return 'Winter'
+            return 'Winter', 32
         elif 'Mega' in text:
-            return 'Mega'
+            return 'Mega', 16
         elif 'Night' in text:
-            return 'Night'
+            return 'Night', 32
         else:
-            return 'Regular'
+            return 'Regular', 8
     else:
-        return 0
+        return False, 1
 
 def nextTile(currentTile):
     if currentTile != 0:

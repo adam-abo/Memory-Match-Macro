@@ -1,3 +1,9 @@
+import os
+
+def clearFolder(path='/Users/adamabouelela/Desktop/Memory-Match-Macro/Boards'):
+    for file in os.listdir(path):
+        os.remove(os.path.join(path, file)) 
+
 def identify(items, collected):
     known_items = {}
     with open('/Users/adamabouelela/Desktop/Memory-Match-Macro/RGB Values.txt', 'r') as file:

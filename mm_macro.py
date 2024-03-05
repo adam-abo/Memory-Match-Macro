@@ -9,7 +9,7 @@ def macro(times):
     games = {'Regular':0, 'Mega':0, 'Night':0, 'Extreme':0, 'Winter':0}
 
     for i in range(times):
-        type = memory_match.initialize()
+        type, cd = memory_match.initialize()
 
         if type:
             games[type] += 1
@@ -25,7 +25,7 @@ def macro(times):
             print('Not Found')
 
         if i != times - 1:
-            for _ in range(8):
+            for _ in range(cd):
                 time.sleep(15*60)
                 pag.press('1')
 
@@ -35,6 +35,5 @@ macro(1)
 
 # Add CD <-- This next?
 # Add outside loop
-# Item Summary <-- This next?
 # polish stuff
 # wazzup squirt
