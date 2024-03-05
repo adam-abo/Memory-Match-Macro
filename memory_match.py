@@ -18,15 +18,15 @@ def initialize():
         pag.press('s')
 
         if 'Extreme' in text:
-            return 1
+            return 'Extreme'
         elif 'Winter' in text:
-            return 2
+            return 'Winter'
         elif 'Mega' in text:
-            return 3
+            return 'Mega'
         elif 'Night' in text:
-            return 4
+            return 'Night'
         else:
-            return 5
+            return 'Regular'
     else:
         return 0
 
@@ -39,7 +39,6 @@ def nextTile(currentTile):
                 pag.press('w')
             pag.press('d')
     pag.press('enter')
-    return currentTile
 
 def beginMatch(tiles, currentTile, chances):
     foundTile = tiles.index(tiles[currentTile])
@@ -166,7 +165,7 @@ def play(type, chances = 12, initialPos = (1999, 1019)):
     final_pix = (chances - 12) * 40
     tiles = []
     dupes = []
-    if type == 4:
+    if type == 'Night':
         dupePot = ((58, 57, 56))
     else:
         dupePot = ((136, 99, 163))
@@ -185,8 +184,8 @@ def play(type, chances = 12, initialPos = (1999, 1019)):
             break
         
         if currentImage == tiles[currentTile-1] and chances % 2 == 0:
-            tiles[currentTile] = tiles[currentTile][:2] + (True,)
-            tiles[currentTile-1] = tiles[currentTile-1][:2] + (True,)
+            tiles[currentTile] = tiles[currentTile][:4] + (True,)
+            tiles[currentTile-1] = tiles[currentTile-1][:4] + (True,)
 
         elif currentImage[:3] == dupePot and chances > 2:
                 dupes.append(currentTile)
