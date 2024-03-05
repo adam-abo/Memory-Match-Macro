@@ -3,11 +3,11 @@ import memory_match
 import testing
 import pyautogui as pag
 
-time.sleep(3)
-collected = {}
-games = {'Regular':0, 'Mega':0, 'Night':0, 'Extreme':0, 'Winter':0}
+def macro(times):
+    time.sleep(3)
+    collected = {}
+    games = {'Regular':0, 'Mega':0, 'Night':0, 'Extreme':0, 'Winter':0}
 
-def macro(collected, times):
     for i in range(times):
         type = memory_match.initialize()
 
@@ -31,7 +31,7 @@ def macro(collected, times):
 
     testing.writeSummary(collected, games)
 
-macro(collected, 1)
+macro(1)
 
 # Add CD <-- This next?
 # Add outside loop

@@ -1,5 +1,13 @@
-def my_function():
-    print(collected)  # Trying to access 'collected' before assigning a value
-    collected = [1, 2, 3]
+collected = {}
+games = {'Regular':0, 'Mega':0, 'Night':0, 'Extreme':0, 'Winter':0}
 
-my_function()
+def macro(collected):
+
+    type = 'Regular'
+    if type:
+        games[type] += 1
+
+        collected = collected
+    print(collected, games)
+
+macro(collected)
