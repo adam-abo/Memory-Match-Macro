@@ -7,6 +7,7 @@ def macro(times):
     time.sleep(3)
     collected = {}
     games = {'Regular':0, 'Mega':0, 'Night':0, 'Extreme':0, 'Winter':0}
+    testing.clearFolder()
 
     for i in range(times):
         type, cd = memory_match.initialize()
@@ -36,4 +37,4 @@ macro(1)
 # Add CD <-- This next?
 # Add outside loop
 # polish stuff
-# wazzup squirt
+# heya squib

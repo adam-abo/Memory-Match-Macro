@@ -13,7 +13,7 @@ Glitter:(198,219,216)
 Glue:Empty
 Oils:(93,53,29)
 Enzymes:(247,247,178)
-Tropical Drinks:Empty
+Tropical Drinks:(152,149,108)
 Magic Beans:(146,192,118)
 Cloud Vials:Empty
 Night Bells:Empty

@@ -1,17 +1,17 @@
-# Main Gameplay Loop (pixel matching and tile movement)
-
 import time
 import os
 import pyautogui as pag
 from PIL import ImageGrab
 from pytesseract import image_to_string
 
+pag.PAUSE = 0.4
+
 def initialize():
     text = image_to_string(ImageGrab.grab(bbox=(1020, 71, 1295, 100)).convert('L'))
     if 'Memory Match' in text and not ':' in text:
-               
+        
         pag.press('e')
-        time.sleep(3)
+        time.sleep(2)
         pag.press('\\')
         pag.press('a')
         pag.press('a')
@@ -51,6 +51,7 @@ def beginMatch(tiles, currentTile, chances):
         matchTiles(foundTile, currentTile, chances)
     else:
         chances -= 2
+        time.sleep(0.2)
         pag.press('enter')
         matchTiles(foundTile, currentTile, chances)
     return chances
@@ -149,7 +150,7 @@ def save_board(initialPos, final_pix):
             exit()
 
     time.sleep(0.1)
-    img = ImageGrab.grab().crop((1550, 850, 2750, 1650))
+    img = ImageGrab.grab().crop((1600, 850, 2700, 1650))
     name = 'board'
     nameC = name
     path = "/Users/adamabouelela/Desktop/Memory-Match-Macro/Boards/"
@@ -204,4 +205,5 @@ def play(type, chances = 12, initialPos = (1999, 1019)):
 
     save_board(initialPos, final_pix)
     pag.press('\\')
+    print(tiles)
     return itemsMatched(tiles)
