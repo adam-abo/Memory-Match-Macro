@@ -4,14 +4,14 @@ import pyautogui as pag
 from PIL import ImageGrab
 from pytesseract import image_to_string
 
-pag.PAUSE = 0.4
+#pag.PAUSE = 0.4    #Not needed with gamemode
 
 def initialize():
     text = image_to_string(ImageGrab.grab(bbox=(1020, 71, 1295, 100)).convert('L'))
     if 'Memory Match' in text and not ':' in text:
         
         pag.press('e')
-        time.sleep(2)
+        time.sleep(5) # replace this to check wheter it can see the tile color
         pag.press('\\')
         pag.press('a')
         pag.press('a')
@@ -28,7 +28,7 @@ def initialize():
         else:
             return 'Regular', 8
     else:
-        return False, 1
+        return False, 8
 
 def nextTile(currentTile):
     if currentTile != 0:
@@ -153,7 +153,7 @@ def save_board(initialPos, final_pix):
     img = ImageGrab.grab().crop((1600, 850, 2700, 1650))
     name = 'board'
     nameC = name
-    path = "/Users/adamabouelela/Desktop/Memory-Match-Macro/Boards/"
+    path = "tesMemory-Match-Macro/Boards/"
     counter = 1
 
     while os.path.exists(os.path.join(path, nameC + '.png')):
