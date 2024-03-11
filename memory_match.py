@@ -153,7 +153,7 @@ def save_board(initialPos, final_pix):
     img = ImageGrab.grab().crop((1600, 850, 2700, 1650))
     name = 'board'
     nameC = name
-    path = "tesMemory-Match-Macro/Boards/"
+    path = "Memory-Match-Macro/Boards/"
     counter = 1
 
     while os.path.exists(os.path.join(path, nameC + '.png')):
