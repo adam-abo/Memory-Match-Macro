@@ -31,7 +31,7 @@ def macro(times=12):
             if i != times - 1:
                 for _ in range(cd):
                     print('begin')
-                    time.sleep(15)#*60)
+                    time.sleep(15*60)
                     pag.press('\\', 2)
                     print('end')
     
