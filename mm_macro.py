@@ -11,36 +11,38 @@ def macro(times=12):
 
     try:
         for i in range(times):
-            print('loop')
             type, cd = memory_match.initialize()
 
             if type:
-                print('found')
                 games[type] += 1
 
-                if type != 'Extreme' and type != 'Winter':
-                    items = memory_match.play(type)
-                else:
-                    items = memory_match.play(type, 16, (1919, 1019))
+                try:
+                    if type != 'Extreme' and type != 'Winter':
+                        items = memory_match.play(type)
+                    else:
+                        items = memory_match.play(type, 16, (1919, 1019))
+                    collected = write_summary.identify(items, collected)
+                    print(collected)
 
-                collected = write_summary.identify(items, collected)
-                print(collected)
+                except SystemExit:
+                    print('holding game open for ma lord')
+
             else:
                 print('Not Found')
 
             if i != times - 1:
                 for _ in range(cd):
-                    print('begin')
                     time.sleep(15*60)
-                    pag.press('\\', 2)
-                    print('end')
-    
+                    pag.press('k')
+        write_summary.writeSummary(collected, games)
+
     except KeyboardInterrupt:
         write_summary.writeSummary(collected, games)
 
 macro()
 
 # Add CD <-- This next?
+# UI nav breaking bug
 # Add outside loop
 # polish stuff
 # ayaaa!!

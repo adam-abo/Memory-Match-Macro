@@ -151,10 +151,10 @@ def save_board(initialPos, final_pix):
 
     time.sleep(0.1)
     img = ImageGrab.grab().crop((1600, 850, 2700, 1650))
-    name = 'board'
-    nameC = name
-    path = "/Users/adamabouelela/Desktop/Memory-Match-Macro/Boards/"
     counter = 1
+    name = 'board'
+    nameC = f"{name}_{counter}"
+    path = "/Users/adamabouelela/Desktop/Memory-Match-Macro/Boards/"
 
     while os.path.exists(os.path.join(path, nameC + '.png')):
         nameC = f"{name}_{counter}"
