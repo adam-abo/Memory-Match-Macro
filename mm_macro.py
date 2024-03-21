@@ -20,12 +20,15 @@ def macro(times=12):
                     if type != 'Extreme' and type != 'Winter':
                         items = memory_match.play(type)
                     else:
-                        items = memory_match.play(type, 16, (1919, 1019))
+                        items = memory_match.play(type, 16, (1919, 1019), (930, 535))
                     collected = write_summary.identify(items, collected)
                     print(collected)
 
                 except SystemExit:
                     print('holding game open for ma lord')
+                    for _ in range(100):
+                        time.sleep(15*60)
+                        pag.press('k')
 
             else:
                 print('Not Found')
@@ -39,7 +42,7 @@ def macro(times=12):
     except KeyboardInterrupt:
         write_summary.writeSummary(collected, games)
 
-macro()
+macro(1)
 
 # Add CD <-- This next?
 # UI nav breaking bug

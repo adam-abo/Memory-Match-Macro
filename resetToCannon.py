@@ -1,6 +1,9 @@
 import time
 from PIL import ImageGrab
 import pyautogui as pag
+import pynput.keyboard
+from pynput.keyboard import Key
+keyboard=pynput.keyboard.Controller()
 
 def reset():
     # Reset
@@ -12,20 +15,22 @@ def reset():
     time.sleep(10)
 
     # Adjust camera orientation
+    keyboard.press(Key.page_up)
+    keyboard.release(Key.page_up)
     pag.press('o', 5)
-    pag.press('pgup', 4)
-    img = ImageGrab.grab()
-    pixel = img.getpixel((2240, 2200))[:3]
-    if pixel[0] == pixel[1] == pixel[2]:
-        pag.press('.', 4)
-        pag.press('pgdn', 4)
-    else:
-        pag.press('.', 4)
+    for _ in range(4):
         img = ImageGrab.grab()
-        pixel = img.getpixel((2240, 2200))[:3]
+        pixel = img.getpixel((2240, 2518))[:3]
         if pixel[0] == pixel[1] == pixel[2]:
             pag.press('.', 4)
             pag.press('pgdn', 4)
+        else:
+            pag.press('.', 4)
+            img = ImageGrab.grab()
+            pixel = img.getpixel((2240, 2518))[:3]
+            if pixel[0] == pixel[1] == pixel[2]:
+                pag.press('.', 4)
+                pag.press('pgdn', 4)
 
 def useCannon():
     # Detect and use cannon
@@ -59,7 +64,3 @@ def walkToExtreme():
 #time.sleep(3)
 #reset()
 #useCannon()
-pag.press('pgdn')
-pag.keyDown('d')
-time.sleep(5)
-pag.keyUp('d')

@@ -8,39 +8,31 @@ from pytesseract import image_to_string
 
 def initialize():
     text = image_to_string(ImageGrab.grab(bbox=(1020, 71, 1295, 100)).convert('L'))
-    if 'Memory Match' in text and not ':' in text:
-        
-        pag.press('e')
-        time.sleep(5) # replace this to check wheter it can see the tile color
-        pag.press('\\')
-        pag.press('a')
-        pag.press('a')
-        pag.press('s')
+    if 'Memory Match' in text:
+        if not ':' in text:
+            pag.press('e')
+            time.sleep(5) # replace this to check wheter it can see the tile color
 
-        if 'Extreme' in text:
-            return 'Extreme', 32
-        elif 'Winter' in text:
-            return 'Winter', 32
-        elif 'Mega' in text:
-            return 'Mega', 16
-        elif 'Night' in text:
-            return 'Night', 32
+            if 'Extreme' in text:
+                return 'Extreme', 32
+            elif 'Winter' in text:
+                return 'Winter', 32
+            elif 'Mega' in text:
+                return 'Mega', 16
+            elif 'Night' in text:
+                return 'Night', 32
+            else:
+                return 'Regular', 8
         else:
-            return 'Regular', 8
+            return False, 8
     else:
         return False, 8
 
-def nextTile(currentTile):
-    if currentTile != 0:
-        if currentTile % 4 != 0:
-            pag.press('s')
-        else:
-            for _ in range(3):
-                pag.press('w')
-            pag.press('d')
-    pag.press('enter')
+def clickTile(tile, clickPos):
+    time.sleep(1)
+    pag.leftClick(clickPos[0] + (tile // 4) * 80, y = clickPos[1] + (tile % 4) * 80)
 
-def beginMatch(tiles, currentTile, chances):
+def beginMatch(tiles, currentTile, chances, clickPos):
     foundTile = tiles.index(tiles[currentTile])
 
     tiles[currentTile] = tiles[currentTile][:4] + (True,)
@@ -48,52 +40,12 @@ def beginMatch(tiles, currentTile, chances):
 
     if chances % 2 == 1:
         chances -= 1
-        matchTiles(foundTile, currentTile, chances)
+        clickTile(foundTile, clickPos)
     else:
         chances -= 2
-        time.sleep(0.2)
-        pag.press('enter')
-        matchTiles(foundTile, currentTile, chances)
+        clickTile(currentTile, clickPos)
+        clickTile(foundTile, clickPos)
     return chances
-
-def matchTiles(index1, index2, chances):
-    columns = index2 // 4 - index1 // 4
-    rows = index2 % 4 - index1 % 4
-
-    time.sleep(0.1)
-    for _ in range(columns):
-        pag.press('a')
-    for _ in range(abs(rows)):
-        if rows > 0:
-            pag.press('w')
-        else:
-            pag.press('s')
-    pag.press('enter')
-
-    if chances > 0:
-        time.sleep(0.2)
-        for _ in range(abs(rows)):
-            if rows > 0:
-                pag.press('s')
-            else:
-                pag.press('w')
-        for _ in range(columns):
-            pag.press('d')
-
-def matchDupe(index1, index2, currentTile):
-    columns = currentTile // 4 - index2 // 4
-    rows = currentTile % 4 - index2 % 4
-
-    for _ in range(columns):
-        pag.press('a')
-    for _ in range(abs(rows)):
-        if rows > 0:
-            pag.press('w')
-        else:
-            pag.press('s')
-    pag.press('enter')
-
-    matchTiles(index1, index2, 0)
 
 def recognize(currentTile, initialPos):
     t = time.time()
@@ -101,10 +53,14 @@ def recognize(currentTile, initialPos):
     y = initialPos[1] + (currentTile % 4) * 160
     scaled_x = x // 2
     scaled_y = y // 2
+    attempt = 6
 
     while (ImageGrab.grab(bbox=(scaled_x, scaled_y, scaled_x+1, scaled_y+1))).getpixel((0,0))[:3] == (170, 130, 73):
-        if time.time() - t > 7:
+        if (time.time() - t) > attempt:
             print('Error: tile ' + str(currentTile) + ' has not flipped')
+            pag.leftClick()
+            attempt += 6
+        elif time.time() - t > 14:
             exit()
 
     time.sleep(0.15) 
@@ -161,27 +117,28 @@ def save_board(initialPos, final_pix):
         counter += 1
     img.save(path + nameC + '.png')
 
-def play(type, chances = 12, initialPos = (1999, 1019)):
+def play(type, chances = 12, initialPos = (1999, 1019), clickPos = (970, 535)):
     currentTile = 0
     final_pix = (chances - 12) * 40
     tiles = []
     dupes = []
     if type == 'Night':
-        dupePot = ((58, 57, 56))
+        dupePot = (58, 57, 56)
     else:
-        dupePot = ((136, 99, 163))
+        dupePot = (136, 99, 163)
 
     while 0 < chances:
         # Checks to see if it isn't the last turn to match possible duplicate pairs. It will not match a dupe pair if it finds a different pair to match at the last moment.
         if len(dupes) < 2 or chances != 2:
             chances -= 1
-            nextTile(currentTile)
+            clickTile(currentTile, clickPos)
             currentImage = recognize(currentTile, initialPos)
             tiles.append(currentImage)
         else:
             tiles[dupes[0]] = tiles[dupes[0]][:4] + (True,)
             tiles[dupes[1]] = tiles[dupes[1]][:4] + (True,)
-            matchDupe(dupes[0], dupes[1], currentTile-1)
+            clickTile(dupes[1], clickPos)
+            clickTile(dupes[0], clickPos)
             break
         
         if currentImage == tiles[currentTile-1] and chances % 2 == 0:
@@ -194,16 +151,17 @@ def play(type, chances = 12, initialPos = (1999, 1019)):
         elif currentImage[:3] == dupePot and chances > 2:
                 dupes.append(currentTile)
                 if len(dupes) == 3 or (len(dupes) == 2 and chances % 2 == 1):
-                    chances = beginMatch(tiles, currentTile, chances)
+                    chances = beginMatch(tiles, currentTile, chances, clickPos)
                     dupes = []
                     dupePot = False
 
         elif currentImage in tiles[:currentTile] and chances > 0:
-            chances = beginMatch(tiles, currentTile, chances)
+            chances = beginMatch(tiles, currentTile, chances, clickPos)
 
         currentTile += 1
 
     save_board(initialPos, final_pix)
-    pag.press('\\')
     print(tiles)
     return itemsMatched(tiles)
+
+#WORK ON THIS
