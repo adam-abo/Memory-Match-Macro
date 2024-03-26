@@ -4,8 +4,6 @@ import pyautogui as pag
 from PIL import ImageGrab
 from pytesseract import image_to_string
 
-#pag.PAUSE = 0.4    #Not needed with gamemode
-
 def initialize():
     text = image_to_string(ImageGrab.grab(bbox=(1020, 71, 1295, 100)).convert('L'))
     if 'Memory Match' in text:
@@ -53,14 +51,15 @@ def recognize(currentTile, initialPos):
     y = initialPos[1] + (currentTile % 4) * 160
     scaled_x = x // 2
     scaled_y = y // 2
-    attempt = 6
+    attempt = 7
 
     while (ImageGrab.grab(bbox=(scaled_x, scaled_y, scaled_x+1, scaled_y+1))).getpixel((0,0))[:3] == (170, 130, 73):
         if (time.time() - t) > attempt:
-            print('Error: tile ' + str(currentTile) + ' has not flipped')
+            print('Attemt #' + str(attempt/7 + 1) + ' of flipping tile ' + str(currentTile))
             pag.leftClick()
-            attempt += 6
-        elif time.time() - t > 14:
+            attempt += 7
+        elif time.time() - t > 17:
+            print('Error: tile ' + str(currentTile) + ' has not flipped')
             exit()
 
     time.sleep(0.15) 
@@ -163,5 +162,3 @@ def play(type, chances = 12, initialPos = (1999, 1019), clickPos = (970, 535)):
     save_board(initialPos, final_pix)
     print(tiles)
     return itemsMatched(tiles)
-
-#WORK ON THIS
