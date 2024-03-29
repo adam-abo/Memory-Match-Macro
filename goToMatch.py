@@ -116,8 +116,17 @@ def cannon():
 
     return False
 
+def walkToMatch(type):
+    match type:
+        case 'Regular':
+            return walkToRegular()
+        case 'Mega':
+            return walkToMega()
+        case 'Extreme':
+            return walkToExtreme()
+
 def walkToRegular():
-    #print('reg')
+    print('reg')
     pag.press('e')
     time.sleep(0.5)
     hold('a', 0.3)
@@ -130,71 +139,37 @@ def walkToRegular():
     hold('d', 3)
     hold('a', 0.01)
     for _ in range(7):
-        if 'Memory Match' in image_to_string(ImageGrab.grab(bbox=(1020, 71, 1295, 100)).convert('L')):
-            return True
+        if 'PlayMemoryMatch' in image_to_string(ImageGrab.grab(bbox=(980, 40, 1295, 100)).convert('L')).replace(" ", "").replace("\n", ""):
+            time.sleep(0.5)
+            text = image_to_string(ImageGrab.grab(bbox=(980, 40, 1295, 100)).convert('L')).replace(" ", "").replace("\n", "")
+            if 'PlayMemoryMatch' in text:
+                return getCD(text, 'Regular')
         hold('w', 0.15)
         time.sleep(0.5)
-
+    return 0, 0
 
 def walkToMega():
     print('mega')
+    return 1, 7200
 
 def walkToExtreme():
     print('Extreme')
+    return 1, 14400
 
-def initialize():
-    text = image_to_string(ImageGrab.grab(bbox=(1020, 71, 1295, 100)).convert('L'))
-    if 'Memory Match' in text:
-        ready = False
+def getCD(str, type):
+    defaults = {'Regular':7200, 'Mega':14400, 'Extreme':28800, 'Night':28800, 'Winter':28800}
+    if '(' in str and ')' in str:
+        str = str.replace(':','').replace('s','')     
+        str = str[str.index(')')-1:str.index('('):-1]
+        secs = 0
+        multi = 1
 
-        if text.count(':') != 2:
-            ready = True
-        else:
-            cd = getCD(text)
-
-        if 'Extreme' in text:
-            if ready:
-                cd = 8*3600
-            return 'Extreme', cd, ready
-        elif 'Winter' in text:
-            if ready:
-                cd = 8*3600
-            return 'Winter', cd, ready
-        elif 'Mega' in text:
-            if ready:
-                cd = 4*3600
-            return 'Mega', cd, ready
-        elif 'Night' in text:
-            if ready:
-                cd = 8*3600
-            return 'Night', cd, ready
-        else:
-            if ready:
-                cd = 2*3600
-            return 'Regular', cd, ready
-    else:
-        return False, False, False
-
-def getCD(str):
-    indices = []
-    index = 0
-    for c in str:
-        if c == ':':
-            indices.append(index)
-        if len(indices) < 2:
-            index += 1
-        else:
-            break
-
-    if indices[1] - indices[0] == 3 and indices[0] >= 2:
-        index = indices[0] - 2
-        str = str[index]+str[index+1]+str[index+3]+str[index+4]+str[index+6]+str[index+7]
-        for c in str:
-            if not c.isdigit():
-                return False
-        
-        hrs = int(str[0] + str[1])
-        mins = int(str[2] + str[3]) + hrs*60
-        secs = int(str[4] + str[5]) + mins*60
-        return secs
-    return False
+        for n in range(len(str)):
+            secs += int(str[n]) * multi
+            if n % 2:
+                multi = multi*6
+            else:
+                multi = multi*10
+        if secs < defaults[type]:
+            return 1, secs   
+    return 2, defaults[type]
