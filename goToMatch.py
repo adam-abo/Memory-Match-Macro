@@ -117,13 +117,16 @@ def cannon():
     return False
 
 def walkToMatch(type):
-    match type:
-        case 'Regular':
-            return walkToRegular()
-        case 'Mega':
-            return walkToMega()
-        case 'Extreme':
-            return walkToExtreme()
+    reset()
+    if cannon():
+        match type:
+            case 'Regular':
+                return walkToRegular()
+            case 'Mega':
+                return walkToMega()
+            case 'Extreme':
+                return walkToExtreme()
+    return 0, 0
 
 def walkToRegular():
     print('reg')
@@ -150,11 +153,53 @@ def walkToRegular():
 
 def walkToMega():
     print('mega')
-    return 1, 7200
+    pag.press('e')
+    time.sleep(0.65)
+    hold('d', 0.3)
+    pag.press('space')
+    pag.press('space')
+    time.sleep(5)
+    pag.press('space')
+    time.sleep(2)
+    hold('s', 1)
+    hold('w', 3)
+    hold('s', 0.01)
+    for _ in range(8):
+        if 'Mega' in image_to_string(ImageGrab.grab(bbox=(980, 40, 1295, 100)).convert('L')):
+            time.sleep(0.5)
+            text = image_to_string(ImageGrab.grab(bbox=(980, 40, 1295, 100)).convert('L'))
+            if 'Mega' in text:
+                return getCD(text, 'Mega')
+        hold('d', 0.15)
+        time.sleep(0.5)
+    return 0, 0
 
 def walkToExtreme():
     print('Extreme')
-    return 1, 14400
+    hold('d', 3)
+    hold('w', 1)
+    hold('a', 0.01)
+    hold('space', 0.08)
+    hold('d', 2.5)
+    hold('space', 0.08)
+    pag.keyDown('w')
+    time.sleep(2.5)
+    hold('space', 1.5)
+    time.sleep(2)
+    hold('space', 0.08)
+    time.sleep(4)
+    hold('space', 0.08)
+    time.sleep(0.4)
+    pag.keyUp('w')
+    for _ in range(8):
+        if 'Extreme' in image_to_string(ImageGrab.grab(bbox=(980, 40, 1295, 100)).convert('L')):
+            time.sleep(0.5)
+            text = image_to_string(ImageGrab.grab(bbox=(980, 40, 1295, 100)).convert('L'))
+            if 'Extreme' in text:
+                return getCD(text, 'Extreme')
+        hold('d', 0.15)
+        time.sleep(0.5)
+    return 0, 0
 
 def getCD(str, type):
     defaults = {'Regular':7200, 'Mega':14400, 'Extreme':28800, 'Night':28800, 'Winter':28800}

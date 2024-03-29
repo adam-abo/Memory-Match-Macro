@@ -7,7 +7,7 @@ import pyautogui as pag
 def macro():
     time.sleep(3)
     collected = {}
-    cooldowns = {'Regular':0}#, 'Mega':0, 'Extreme':0}#, 'Night':0, 'Winter':0}
+    cooldowns = {'Regular':0, 'Mega':0, 'Extreme':0}#, 'Night':0, 'Winter':0}
     games = {'Regular':0, 'Mega':0, 'Extreme':0, 'Night':0, 'Winter':0}
     itemSummary.clearFolder()
 
@@ -20,19 +20,17 @@ def macro():
                     type = key
             if mini == 0:
                 while True:
-                    if goToMatch.reset():
-                        if goToMatch.cannon():
-                            status, cd = goToMatch.walkToMatch(type)
-                            if status == 0:
-                                continue
-                            elif status == 1:
-                                ready = False
-                                cooldowns[type] = cd
-                                break
-                            elif status == 2:
-                                ready = True
-                                cooldowns[type] = cd
-                                break
+                    status, cd = goToMatch.walkToMatch(type)
+                    if status == 0:
+                        continue
+                    elif status == 1:
+                        ready = False
+                        cooldowns[type] = cd
+                        break
+                    elif status == 2:
+                        ready = True
+                        cooldowns[type] = cd
+                        break
             else:
                 goToMatch.reset()
                 wait = True
@@ -42,7 +40,7 @@ def macro():
                     for key in cooldowns:
                         cooldowns[key] -= 300
                         if cooldowns[key] <= 0:
-                            cooldowns[key] == 0
+                            cooldowns[key] = 0
                             wait = False
 
             if ready:
