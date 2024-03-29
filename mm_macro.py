@@ -1,51 +1,56 @@
 import time
 import memory_match
-import write_summary
+import itemSummary
+import goToMatch
 import pyautogui as pag
 
-def macro(times=12):
+def macro():
     time.sleep(3)
     collected = {}
+    there = False
     games = {'Regular':0, 'Mega':0, 'Night':0, 'Extreme':0, 'Winter':0}
-    write_summary.clearFolder()
+    itemSummary.clearFolder()
 
     try:
-        for i in range(times):
-            type, cd = memory_match.initialize()
+        while True:
+            type, cd, ready = memory_match.initialize()
 
             if type:
-                games[type] += 1
+                if ready:
+                    games[type] += 1
 
-                try:
-                    if type != 'Extreme' and type != 'Winter':
-                        items = memory_match.play(type)
-                    else:
-                        items = memory_match.play(type, 16, (1919, 1019), (930, 535))
-                    collected = write_summary.identify(items, collected)
-                    print(collected)
+                    try:
+                        if type != 'Extreme' and type != 'Winter':
+                            items = memory_match.play(type)
+                        else:
+                            items = memory_match.play(type, 16, (1919, 1019), (930, 535))
+                        collected = itemSummary.identify(items, collected)
+                        print(collected)
 
-                except SystemExit:
-                    print('holding game open for ma lord')
-                    for _ in range(100):
-                        time.sleep(15*60)
-                        pag.press('k')
-
+                    except SystemExit:
+                        print('holding game open for ma lord')
+                        for _ in range(100):
+                            time.sleep(15*60)
+                            pag.press('k')
             else:
                 print('Not Found')
-
-            if i != times - 1:
+                
                 for _ in range(cd):
                     time.sleep(15*60)
                     pag.press('k')
-        write_summary.writeSummary(collected, games)
+
+                while not there:
+                    if goToMatch.reset():
+                        if goToMatch.cannon():
+                            if goToMatch.walkToRegular():
+                                there = True
 
     except KeyboardInterrupt:
-        write_summary.writeSummary(collected, games)
+        itemSummary.writeSummary(collected, games)
 
-macro(1)
+macro()
 
 # Add CD <-- This next?
-# UI nav breaking bug
 # Add outside loop
 # polish stuff
-# ayaaa!!
+# ;)

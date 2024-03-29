@@ -4,28 +4,6 @@ import pyautogui as pag
 from PIL import ImageGrab
 from pytesseract import image_to_string
 
-def initialize():
-    text = image_to_string(ImageGrab.grab(bbox=(1020, 71, 1295, 100)).convert('L'))
-    if 'Memory Match' in text:
-        if not ':' in text:
-            pag.press('e')
-            time.sleep(5) # replace this to check wheter it can see the tile color
-
-            if 'Extreme' in text:
-                return 'Extreme', 32
-            elif 'Winter' in text:
-                return 'Winter', 32
-            elif 'Mega' in text:
-                return 'Mega', 16
-            elif 'Night' in text:
-                return 'Night', 32
-            else:
-                return 'Regular', 8
-        else:
-            return False, 8
-    else:
-        return False, 8
-
 def clickTile(tile, clickPos):
     time.sleep(1)
     pag.leftClick(clickPos[0] + (tile // 4) * 80, y = clickPos[1] + (tile % 4) * 80)
@@ -125,6 +103,9 @@ def play(type, chances = 12, initialPos = (1999, 1019), clickPos = (970, 535)):
         dupePot = (58, 57, 56)
     else:
         dupePot = (136, 99, 163)
+
+    pag.press('e')
+    time.sleep(5) # replace this to check wheter it can see the tile color
 
     while 0 < chances:
         # Checks to see if it isn't the last turn to match possible duplicate pairs. It will not match a dupe pair if it finds a different pair to match at the last moment.

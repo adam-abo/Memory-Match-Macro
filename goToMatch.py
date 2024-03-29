@@ -39,8 +39,9 @@ def reset():
             for _ in range(4):
                 pag.press('.')
                 time.sleep(0.05)
-    #call checks in order
+    return True
 
+# Not being used currently
 def checkTypes(type):
     match type:
         case 0: #Slot Check
@@ -141,27 +142,59 @@ def walkToMega():
 def walkToExtreme():
     print('Extreme')
 
-time.sleep(3)
-sucesses = {'resets':0, 'cannon':0, 'match':0}
-fails = {'resets':0, 'cannon':0, 'match':0}
-t = time.time()
+def initialize():
+    text = image_to_string(ImageGrab.grab(bbox=(1020, 71, 1295, 100)).convert('L'))
+    if 'Memory Match' in text:
+        ready = False
 
-try:
-    while time.time() - t < 3600*6:
-        if reset():
-            sucesses['resets'] += 1
-            if cannon():
-                sucesses['cannon'] += 1
-                if walkToRegular():
-                    sucesses['match'] += 1
-                else:
-                    fails['match'] += 1  
-            else:
-                fails['cannon'] += 1
+        if text.count(':') != 2:
+            ready = True
         else:
-            fails['resets'] += 1
-    print('Fails:', fails)
-    print('Successes:', sucesses)
-except:
-    print('Fails:', fails)
-    print('Successes:', sucesses)
+            cd = getCD(text)
+
+        if 'Extreme' in text:
+            if ready:
+                cd = 8*3600
+            return 'Extreme', cd, ready
+        elif 'Winter' in text:
+            if ready:
+                cd = 8*3600
+            return 'Winter', cd, ready
+        elif 'Mega' in text:
+            if ready:
+                cd = 4*3600
+            return 'Mega', cd, ready
+        elif 'Night' in text:
+            if ready:
+                cd = 8*3600
+            return 'Night', cd, ready
+        else:
+            if ready:
+                cd = 2*3600
+            return 'Regular', cd, ready
+    else:
+        return False, False, False
+
+def getCD(str):
+    indices = []
+    index = 0
+    for c in str:
+        if c == ':':
+            indices.append(index)
+        if len(indices) < 2:
+            index += 1
+        else:
+            break
+
+    if indices[1] - indices[0] == 3 and indices[0] >= 2:
+        index = indices[0] - 2
+        str = str[index]+str[index+1]+str[index+3]+str[index+4]+str[index+6]+str[index+7]
+        for c in str:
+            if not c.isdigit():
+                return False
+        
+        hrs = int(str[0] + str[1])
+        mins = int(str[2] + str[3]) + hrs*60
+        secs = int(str[4] + str[5]) + mins*60
+        return secs
+    return False
