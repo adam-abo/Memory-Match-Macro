@@ -6,6 +6,8 @@ import pyautogui as pag
 
 def macro():
     time.sleep(3)
+    t1 = time.time()
+    lastType = False
     collected = {}
     cooldowns = {'Regular':0, 'Mega':0, 'Extreme':0}#, 'Night':0, 'Winter':0}
     games = {'Regular':0, 'Mega':0, 'Extreme':0, 'Night':0, 'Winter':0}
@@ -13,62 +15,58 @@ def macro():
 
     try:
         while True:
-            mini = 9999
             for key in cooldowns:
-                if cooldowns[key] < mini:
-                    mini = cooldowns[key]
+                if cooldowns[key] == 0:
+                    t = time.time()
                     type = key
-            if mini == 0:
-                while True:
-                    status, cd = goToMatch.walkToMatch(type)
-                    if status == 0:
-                        continue
-                    elif status == 1:
-                        ready = False
-                        cooldowns[type] = cd
-                        break
-                    elif status == 2:
-                        ready = True
-                        cooldowns[type] = cd
-                        break
-            else:
-                goToMatch.reset()
-                wait = True
-                while wait:
-                    pag.press('k')
-                    time.sleep(300)
+
+                    while True:
+                        t2 = time.time()
+                        if lastType != type:
+                            status, cd = goToMatch.walkToMatch(type)
+                        else:
+                            status, cd = goToMatch.getCD(type)
+
+                        if status == 0:
+                            continue
+                        elif status == 1:
+                            cooldowns[type] = cd
+                            break
+                        elif status == 2:
+                            games[type] += 1
+                            cooldowns[type] = cd + time.time() - t2
+                            collected = itemSummary.identify(memory_match.solve(type), collected)
+                            break
+
                     for key in cooldowns:
-                        cooldowns[key] -= 300
-                        if cooldowns[key] <= 0:
-                            cooldowns[key] = 0
-                            wait = False
-
-            if ready:
-                ready = False
-                games[type] += 1
-
-                try:
-                    if type != 'Extreme' and type != 'Winter':
-                        items = memory_match.play(type)
-                    else:
-                        items = memory_match.play(type, 16, (1919, 1019), (930, 535))
-                    collected = itemSummary.identify(items, collected)
-                    print(collected)
-
-
-                except SystemExit:
-                    print('holding game open for ma lord')
-                    for _ in range(100):
-                        time.sleep(15*60)
-                        pag.press('k')
+                        if key != type:
+                            cooldowns[key] -= time.time() - t
+                            if cooldowns[key] < 0:
+                                cooldowns[key] = 0
+                    lastType = type
+                    
+            print(cooldowns)
+            #goToMatch.reset() #If you want to put smthn in between matches
+            wait = True
+            while wait:
+                t = time.time()
+                for key in cooldowns:
+                    cooldowns[key] -= time.time() - t
+                    if cooldowns[key] <= 0:
+                        cooldowns[key] = 0
+                        wait = False
+                if wait:
+                    pag.press('k')
+                    time.sleep(60)
             print(cooldowns)
 
     except KeyboardInterrupt:
         itemSummary.writeSummary(collected, games)
+        print(time.time()-t1)
 
 macro()
 
-# Add CD <-- This next?
-# Add outside loop
+# Night MM
+# When a MM is almost ready walk to it and wait?
 # polish stuff
 # ;)

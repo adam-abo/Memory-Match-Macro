@@ -46,5 +46,3 @@ def writeSummary(items, games = {}):
             f.write('{\\listtext	\\uc0\\u8259 	}' + f'{key}: {value}' + '\\\n')
 
         f.write('\\pard\\tx566\\tx1133\\tx1700\\tx2267\\tx2834\\tx3401\\tx3968\\tx4535\\tx5102\\tx5669\\tx6236\\tx6803\\sl360\\slmult1\\pardirnatural\\partightenfactor0\n\\cf0 }')
-
-writeSummary({}, {})

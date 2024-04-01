@@ -2,6 +2,7 @@ import time
 import os
 import pyautogui as pag
 from PIL import ImageGrab
+import random
 from pytesseract import image_to_string
 
 def clickTile(tile, clickPos):
@@ -42,6 +43,11 @@ def recognize(currentTile, initialPos):
 
     time.sleep(0.15) 
     img = ImageGrab.grab()
+    ###
+    if 130 < img.getpixel((x, y))[0] < 140:
+        r = random.randint(0,10000)
+        img.save("/Users/adamabouelela/Desktop/mi"+str(r)+".png")
+    ###
     return img.getpixel((x, y))[:3] + (quantify(img.crop((x-35, y+15, x+50, y+50))), False)
 
 def quantify(img):
@@ -94,52 +100,76 @@ def save_board(initialPos, final_pix):
         counter += 1
     img.save(path + nameC + '.png')
 
-def play(type, chances = 12, initialPos = (1999, 1019), clickPos = (970, 535)):
+def solve(type):
     currentTile = 0
-    final_pix = (chances - 12) * 40
     tiles = []
     dupes = []
-    if type == 'Night':
-        dupePot = (58, 57, 56)
+
+    if type != 'Extreme' and type != 'Winter':
+        chances = 12
+        final_pix = 0
+        initialPos = (1999, 1019)
+        clickPos = (970, 535)
+        if type == 'Night':
+            dupePot = (58, 57, 56)
+        else:
+            dupePot = (136, 99, 163)
     else:
+        chances = 16
+        final_pix = 16 * 40
+        initialPos = (1919, 1019)
+        clickPos = (930, 535)
         dupePot = (136, 99, 163)
 
-    pag.press('e')
-    time.sleep(5) # replace this to check wheter it can see the tile color
+    try:
+        t = time.time()
+        while ImageGrab.grab(bbox=(initialPos[0], initialPos[1], initialPos[0]+1, initialPos[1]+1)).getpixel((0,0))[:3] == (170, 130, 73):
+            if time.time() - t > 7:
+                print('Game has not started.')
+                exit()
 
-    while 0 < chances:
-        # Checks to see if it isn't the last turn to match possible duplicate pairs. It will not match a dupe pair if it finds a different pair to match at the last moment.
-        if len(dupes) < 2 or chances != 2:
-            chances -= 1
-            clickTile(currentTile, clickPos)
-            currentImage = recognize(currentTile, initialPos)
-            tiles.append(currentImage)
-        else:
-            tiles[dupes[0]] = tiles[dupes[0]][:4] + (True,)
-            tiles[dupes[1]] = tiles[dupes[1]][:4] + (True,)
-            clickTile(dupes[1], clickPos)
-            clickTile(dupes[0], clickPos)
-            break
-        
-        if currentImage == tiles[currentTile-1] and chances % 2 == 0:
-            tiles[currentTile] = tiles[currentTile][:4] + (True,)
-            tiles[currentTile-1] = tiles[currentTile-1][:4] + (True,)
-            if currentImage[:3] == dupePot:
-                dupes = []
-                dupePot = False
+        pag.press('e')
+        time.sleep(5) # replace this to check wheter it can see the tile color
 
-        elif currentImage[:3] == dupePot and chances > 2:
-                dupes.append(currentTile)
-                if len(dupes) == 3 or (len(dupes) == 2 and chances % 2 == 1):
-                    chances = beginMatch(tiles, currentTile, chances, clickPos)
+        while 0 < chances:
+            # Checks to see if it isn't the last turn to match possible duplicate pairs. It will not match a dupe pair if it finds a different pair to match at the last moment.
+            if len(dupes) < 2 or chances != 2:
+                chances -= 1
+                clickTile(currentTile, clickPos)
+                currentImage = recognize(currentTile, initialPos)
+                tiles.append(currentImage)
+            else:
+                tiles[dupes[0]] = tiles[dupes[0]][:4] + (True,)
+                tiles[dupes[1]] = tiles[dupes[1]][:4] + (True,)
+                clickTile(dupes[1], clickPos)
+                clickTile(dupes[0], clickPos)
+                break
+            
+            if currentImage == tiles[currentTile-1] and chances % 2 == 0:
+                tiles[currentTile] = tiles[currentTile][:4] + (True,)
+                tiles[currentTile-1] = tiles[currentTile-1][:4] + (True,)
+                if currentImage[:3] == dupePot:
                     dupes = []
                     dupePot = False
 
-        elif currentImage in tiles[:currentTile] and chances > 0:
-            chances = beginMatch(tiles, currentTile, chances, clickPos)
+            elif currentImage[:3] == dupePot and chances > 2:
+                    dupes.append(currentTile)
+                    if len(dupes) == 3 or (len(dupes) == 2 and chances % 2 == 1):
+                        chances = beginMatch(tiles, currentTile, chances, clickPos)
+                        dupes = []
+                        dupePot = False
 
-        currentTile += 1
+            elif currentImage in tiles[:currentTile] and chances > 0:
+                chances = beginMatch(tiles, currentTile, chances, clickPos)
 
-    save_board(initialPos, final_pix)
-    print(tiles)
-    return itemsMatched(tiles)
+            currentTile += 1
+
+        print(tiles)
+        save_board(initialPos, final_pix)
+        return itemsMatched(tiles)
+    
+    except SystemExit:
+        print('holding game open for ma lord')
+        for _ in range(100):
+            time.sleep(15*60)
+            pag.press('k')
