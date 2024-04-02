@@ -88,7 +88,7 @@ def save_board(initialPos, final_pix):
             print('Game was thought to end.')
             exit()
 
-    time.sleep(0.1)
+    time.sleep(0.15)
     img = ImageGrab.grab().crop((1600, 850, 2700, 1650))
     counter = 1
     name = 'board'
@@ -116,7 +116,7 @@ def solve(type):
             dupePot = (136, 99, 163)
     else:
         chances = 16
-        final_pix = 16 * 40
+        final_pix = 160
         initialPos = (1919, 1019)
         clickPos = (930, 535)
         dupePot = (136, 99, 163)

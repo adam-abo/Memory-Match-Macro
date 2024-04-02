@@ -115,7 +115,7 @@ def cannon():
     # Detect and use cannon
     hold('w', 0.8)
     pag.keyDown("d")
-    time.sleep(6.5)
+    time.sleep(7)
     jump()
     time.sleep(0.2)
     pag.keyUp("d")
@@ -136,6 +136,24 @@ def cannon():
             return True
         hold('a', 0.2)
 
+    return False
+
+def detectNight():
+    img = ImageGrab.grab(bbox=(2160,0,2240,80))
+    image = img.convert('L')
+    width, height = image.size
+    black_pixels = 0
+
+    for y in range(height):
+        for x in range(width):
+            pixel_value = image.getpixel((x, y))
+
+            if pixel_value == 0:
+                black_pixels += 1
+
+    if black_pixels/(width * height) > 0.9:
+        ImageGrab.grab().save("/Users/adamabouelela/Desktop/Night"+str(random.randint(0,10000))+".png")
+        return True
     return False
 
 def walkToMatch(type):
@@ -205,7 +223,7 @@ def walkToExtreme():
     jump()
     hold('d', 2.5)
     jump()
-    pag.keyDown('w')
+    keyboard.press('w')
     time.sleep(2.5)
     hold('space', 1.5)
     hold('d', 0.7)
@@ -214,7 +232,7 @@ def walkToExtreme():
     time.sleep(4)
     jump()
     time.sleep(0.75)
-    pag.keyUp('w')
+    keyboard.release('w')
     for _ in range(8):
         if 'Extreme' in image_to_string(ImageGrab.grab(bbox=(955, 40, 1295, 100)).convert('L')):
             time.sleep(0.5)
@@ -232,7 +250,7 @@ def walkToNight():
     time.sleep(2.5)
     hold('s', 2.5)
     hold('d', 2)
-    hold('a', 0.2)
+    hold('a', 0.3)
     hold('s', 0.5)
     hold('a', 1.5)
     hold('s', 6)
@@ -248,8 +266,40 @@ def walkToNight():
     hold('w', 0.2)
     jump('w', 1)
     pag.press('.')
+    hold('w', 0.2)
+    pag.press(',')
+    jump('w', 0.6)
+    pag.press('.')
+    hold('w', 0.5)
+    keyboard.press('w')
+    jump('a', 0.3)
+    time.sleep(0.5)
+    keyboard.release('w')
+    jump('w', 0.8)
+    jump('w', 0.8)
+    pag.press('.')
     hold('w', 0.3)
-    jump('w', 1)
+    hold('d', 0.1)
+    keyboard.press('w')
+    jump('d', 0.3)
+    time.sleep(0.5)
+    keyboard.release('w')
+    multiHold('aw', 3)
+    hold('d', 1)
+    multiHold('dw', 0.4)
+    hold('w', 1.4)
+    multiHold('aw', 0.4)
+    hold('a', 1)
+    multiHold('as', 1)
+    multiHold('dw', 0.3)
+    for _ in range(7):
+        if 'Night' in image_to_string(ImageGrab.grab(bbox=(955, 40, 1295, 100)).convert('L')).replace(" ", "").replace("\n", ""):
+            time.sleep(0.5)
+            text = image_to_string(ImageGrab.grab(bbox=(955, 40, 1295, 100)).convert('L')).replace(" ", "").replace("\n", "")
+            if 'Night' in text:
+                return getCD('Night')
+        hold('w', 0.25)
+        time.sleep(0.5)
 
     return 0, 0
 
@@ -274,5 +324,6 @@ def getCD(type):
             return 1, secs   
     return 2, defaults[type]
 
-#time.sleep(2)
-#walkToNight()
+time.sleep(2)
+#print(detectNight())
+#print(walkToNight())
