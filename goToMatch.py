@@ -51,6 +51,20 @@ def checkTypes(type):
         case 3: #Reset and Scatter Check
             return True
 '''
+def oriented():
+    for _ in range(4):
+        pix = ImageGrab.grab().getpixel((2240, 2518))[:3]
+        if (abs(pix[2]-pix[1])+abs(pix[2]-pix[0])+abs(pix[1]-pix[0]))/3 < 6:
+                time.sleep(0.1)
+                for _ in range(4):
+                    keyboard.press('o')
+                    time.sleep(0.1)
+                    keyboard.release('o')
+                return True
+        for _ in range(4):
+            pag.press('.')
+            time.sleep(0.05)
+    return False
 
 def reset():
     for _ in range(3):
@@ -61,7 +75,7 @@ def reset():
             pag.press('r')
             time.sleep(0.2)
             pag.press('enter')
-            time.sleep(9)
+            time.sleep(8.5)
 
             text = image_to_string(ImageGrab.grab(bbox=(1018, 45, 1295, 100)).convert('L'))
             if 'Make Honey' in text or 'Flower Fields' in text:
@@ -73,19 +87,8 @@ def reset():
                     time.sleep(3)
                 break
 
-        #Move this to checks function
-        for _ in range(4):
-            pix = ImageGrab.grab().getpixel((2240, 2518))[:3]
-            if (abs(pix[2]-pix[1])+abs(pix[2]-pix[0])+abs(pix[1]-pix[0]))/3 < 6:
-                    time.sleep(0.1)
-                    for _ in range(4):
-                        keyboard.press('o')
-                        time.sleep(0.1)
-                        keyboard.release('o')
-                    return True
-            for _ in range(4):
-                pag.press('.')
-                time.sleep(0.05)
+        if oriented():
+            break
     return True
 
 def hold(k, t):
@@ -139,25 +142,28 @@ def cannon():
     return False
 
 def detectNight():
-    img = ImageGrab.grab(bbox=(2160,0,2240,80))
-    image = img.convert('L')
-    width, height = image.size
+    pag.press('.')
+    img = ImageGrab.grab(bbox=(2160,0,2240,80)).convert('L')
+    pag.press(',')
+    width, height = img.size
     black_pixels = 0
 
     for y in range(height):
         for x in range(width):
-            pixel_value = image.getpixel((x, y))
-
+            pixel_value = img.getpixel((x, y))
             if pixel_value == 0:
                 black_pixels += 1
 
+    del img
     if black_pixels/(width * height) > 0.9:
-        ImageGrab.grab().save("/Users/adamabouelela/Desktop/Night"+str(random.randint(0,10000))+".png")
         return True
     return False
 
 def walkToMatch(type):
     reset()
+    if type == 'Night' and not detectNight():
+        return 0, 1
+
     if cannon():
         match type:
             case 'Regular':
@@ -167,7 +173,7 @@ def walkToMatch(type):
             case 'Extreme':
                 return walkToExtreme()
             case 'Night':
-                return walkToExtreme()
+                return walkToNight()
     return 0, 0
 
 def walkToRegular():
@@ -190,7 +196,7 @@ def walkToRegular():
                 return getCD('Regular')
         hold('w', 0.25)
         time.sleep(0.5)
-    ImageGrab.grab().save("/Users/adamabouelela/Desktop/Reg"+str(random.randint(0,10000))+".png")
+    ImageGrab.grab().save("/Users/adamabouelela/Desktop/Regular"+str(random.randint(0,10000))+".png")
     return 0, 0
 
 def walkToMega():
@@ -203,7 +209,7 @@ def walkToMega():
     pag.press('space')
     time.sleep(2)
     hold('s', 0.5)
-    hold('w', 2.5)
+    hold('w', 3)
     hold('s', 0.2)
     for _ in range(8):
         if 'Mega' in image_to_string(ImageGrab.grab(bbox=(955, 40, 1295, 100)).convert('L')):
@@ -213,7 +219,7 @@ def walkToMega():
                 return getCD('Mega')
         hold('d', 0.25)
         time.sleep(0.5)
-    ImageGrab.grab().save("/Users/adamabouelela/Desktop/Meg"+str(random.randint(0,10000))+".png")
+    ImageGrab.grab().save("/Users/adamabouelela/Desktop/Mega"+str(random.randint(0,10000))+".png")
     return 0, 0
 
 def walkToExtreme():
@@ -241,7 +247,7 @@ def walkToExtreme():
                 return getCD('Extreme')
         hold('d', 0.25)
         time.sleep(0.5)
-    ImageGrab.grab().save("/Users/adamabouelela/Desktop/Ex"+str(random.randint(0,10000))+".png")
+    ImageGrab.grab().save("/Users/adamabouelela/Desktop/Extreme"+str(random.randint(0,10000))+".png")
     return 0, 0
 
 def walkToNight():
@@ -300,7 +306,7 @@ def walkToNight():
                 return getCD('Night')
         hold('w', 0.25)
         time.sleep(0.5)
-
+    ImageGrab.grab().save("/Users/adamabouelela/Desktop/Night"+str(random.randint(0,10000))+".png")
     return 0, 0
 
 def getCD(type):
@@ -324,6 +330,6 @@ def getCD(type):
             return 1, secs   
     return 2, defaults[type]
 
-time.sleep(2)
-#print(detectNight())
+#time.sleep(2)
+#reset()
 #print(walkToNight())

@@ -2,7 +2,6 @@ import time
 import os
 import pyautogui as pag
 from PIL import ImageGrab
-import random
 from pytesseract import image_to_string
 
 def clickTile(tile, clickPos):
@@ -41,13 +40,8 @@ def recognize(currentTile, initialPos):
             print('Error: tile ' + str(currentTile) + ' has not flipped')
             exit()
 
-    time.sleep(0.15) 
+    time.sleep(0.2) 
     img = ImageGrab.grab()
-    ###
-    if 130 < img.getpixel((x, y))[0] < 140:
-        r = random.randint(0,10000)
-        img.save("/Users/adamabouelela/Desktop/mi"+str(r)+".png")
-    ###
     return img.getpixel((x, y))[:3] + (quantify(img.crop((x-35, y+15, x+50, y+50))), False)
 
 def quantify(img):
@@ -62,7 +56,14 @@ def quantify(img):
         return int(text[text.find('x') + 1:])
     else:
         return 1
-    
+
+def doubleCheck(img1, img2):
+    if img1[3] == img2[3]:
+        if abs(img2[0] - img1[0]) <= 5 and abs(img2[1] - img1[1]) <= 5 and abs(img2[2] - img1[2]) <= 5:
+            print(img1)
+            return True
+    return False
+
 def itemsMatched(items):
     matches = []
     for item in items:
@@ -105,6 +106,7 @@ def solve(type):
     tiles = []
     dupes = []
 
+    # Set variables based on type of memory match.
     if type != 'Extreme' and type != 'Winter':
         chances = 12
         final_pix = 0
@@ -122,14 +124,14 @@ def solve(type):
         dupePot = (136, 99, 163)
 
     try:
+        pag.press('e')
         t = time.time()
-        while ImageGrab.grab(bbox=(initialPos[0], initialPos[1], initialPos[0]+1, initialPos[1]+1)).getpixel((0,0))[:3] == (170, 130, 73):
-            if time.time() - t > 7:
+        while ImageGrab.grab(bbox=(initialPos[0]//2, initialPos[1]//2, initialPos[0]//2+1, initialPos[1]//2+1)).getpixel((0,0))[:3] != (170, 130, 73):
+            time.sleep(1)
+            if time.time() - t > 10:
                 print('Game has not started.')
                 exit()
-
-        pag.press('e')
-        time.sleep(5) # replace this to check wheter it can see the tile color
+        time.sleep(1)
 
         while 0 < chances:
             # Checks to see if it isn't the last turn to match possible duplicate pairs. It will not match a dupe pair if it finds a different pair to match at the last moment.
@@ -145,10 +147,10 @@ def solve(type):
                 clickTile(dupes[0], clickPos)
                 break
             
-            if currentImage == tiles[currentTile-1] and chances % 2 == 0:
-                tiles[currentTile] = tiles[currentTile][:4] + (True,)
+            if chances % 2 == 0 and doubleCheck(currentImage, tiles[currentTile-1]):
+                tiles[currentTile] = tiles[currentTile-1][:4] + (True,)
                 tiles[currentTile-1] = tiles[currentTile-1][:4] + (True,)
-                if currentImage[:3] == dupePot:
+                if tiles[currentTile][:3] == dupePot:
                     dupes = []
                     dupePot = False
 
