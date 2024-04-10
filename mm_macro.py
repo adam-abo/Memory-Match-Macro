@@ -35,7 +35,8 @@ def macro():
                     break
                     
             # Cooldown tracking system
-            goToMatch.reset()
+            if min(cooldowns, key=cooldowns.get) == 'Night':
+                goToMatch.reset()
             wait = True
             while wait:
                 for _ in range(60):
@@ -43,7 +44,7 @@ def macro():
                         cooldowns[key] -= time.time() - t
                         if cooldowns[key] <= 0:
                             cooldowns[key] = 0
-                            if key != 'Night' or goToMatch.detectNight():
+                            if wait and (key != 'Night' or goToMatch.detectNight()):
                                 wait = False
                     t = time.time()
                     if wait:
@@ -60,7 +61,6 @@ def macro():
 
 macro()
 
-# Deal with matches right next to each other.
 # When a MM is almost ready walk to it and wait? (look for night when Night MM is close)
 # polish stuff
 # ;)

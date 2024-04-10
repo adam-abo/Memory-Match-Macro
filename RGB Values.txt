@@ -10,7 +10,7 @@ Jellybeans:(152,188,243)
 Red Extracts:(207,73,67)
 Blue Extracts:(53,72,138)
 Glitter:(198,219,216)
-Glue:Empty
+Glue:(127,239,183)
 Oils:(93,53,29)
 Enzymes:(247,247,178)
 Tropical Drinks:(152,149,108)
@@ -26,7 +26,7 @@ Blueberries:(54,94,144)
 Moon Charms:(58,57,56)
 Royal Jellies:(136,99,163)
 Star Jellies:(249,236,175)
-Gold Eggs:Empty
+Gold Eggs:(248,216,74)
 Diamond Eggs:Empty
 Star Eggs:Empty
 Mythic Eggs:Empty
