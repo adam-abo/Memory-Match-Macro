@@ -144,6 +144,7 @@ def cannon():
 def detectNight():
     pag.press('.')
     img = ImageGrab.grab(bbox=(2160,0,2240,80)).convert('L')
+    time.sleep(0.1)
     pag.press(',')
     width, height = img.size
     black_pixels = 0
@@ -327,7 +328,7 @@ def getCD(type):
                 multi = multi*10
         if secs < defaults[type]:
             ImageGrab.grab().save("/Users/adamabouelela/Desktop/CD"+str(random.randint(0,10000))+".png")
-            return 1, secs   
+            return 1, secs
     return 2, defaults[type]
 
 #time.sleep(2)

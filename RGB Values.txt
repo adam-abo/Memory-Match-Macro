@@ -15,7 +15,7 @@ Oils:(93,53,29)
 Enzymes:(247,247,178)
 Tropical Drinks:(152,149,108)
 Magic Beans:(146,192,118)
-Cloud Vials:Empty
+Cloud Vials:(239,239,239)
 Night Bells:Empty
 Treats:(225,220,205)
 Star Treats:Empty
