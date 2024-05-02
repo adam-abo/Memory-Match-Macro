@@ -16,7 +16,7 @@ Enzymes:(247,247,178)
 Tropical Drinks:(152,149,108)
 Magic Beans:(146,192,118)
 Cloud Vials:(239,239,239)
-Night Bells:Empty
+Night Bells:(166,169,170)
 Treats:(225,220,205)
 Star Treats:Empty
 Sunflower Seeds:(225,222,193)

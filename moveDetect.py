@@ -3,7 +3,9 @@ from PIL import ImageGrab
 import pyautogui as pag
 import pynput.keyboard
 from pynput.keyboard import Key
+from pynput.mouse import Button, Controller
 from pytesseract import image_to_string
+mouse = Controller()
 keyboard = pynput.keyboard.Controller()
 import random
 
@@ -114,11 +116,11 @@ def jump(k='', t=0):
         keyboard.release(c)
 
 
-def cannon():
+def cannon(slot):
     # Detect and use cannon
-    hold('w', 0.8)
+    hold('w', 0.7)
     pag.keyDown("d")
-    time.sleep(7)
+    time.sleep(1.2*slot)
     jump()
     time.sleep(0.2)
     pag.keyUp("d")
@@ -160,12 +162,12 @@ def detectNight():
         return True
     return False
 
-def walkToMatch(type):
+def walkToMatch(type, slot):
     reset()
     if type == 'Night' and not detectNight():
         return 0, 1
 
-    if cannon():
+    if cannon(slot):
         match type:
             case 'Regular':
                 return walkToRegular()
@@ -327,10 +329,78 @@ def getCD(type):
             else:
                 multi = multi*10
         if secs < defaults[type]:
-            ImageGrab.grab().save("/Users/adamabouelela/Desktop/CD"+str(random.randint(0,10000))+".png")
+            #ImageGrab.grab().save("/Users/adamabouelela/Desktop/CD"+str(random.randint(0,10000))+".png")
             return 1, secs
     return 2, defaults[type]
 
-#time.sleep(2)
-#reset()
-#print(walkToNight())
+def hiveSlot():
+    for _ in range(4):
+        reset()
+        hold('w', 0.7)
+        hold('d', 7.4)
+        hold('s', 0.5)
+        hold('a', 0.5)
+        time.sleep(0.3)
+
+        for slot in range(6):
+            text = image_to_string(ImageGrab.grab(bbox=(1018, 45, 1295, 100)).convert('L'))
+            if 'Make Honey' in text or 'Flower Fields' in text:
+                return slot + 1
+            elif slot == 5:
+                break
+            hold('a', 1.3)
+            time.sleep(0.3)
+    return 6
+
+def claimHive():
+    for _ in range(15):
+        hold('w', 2.75)
+        hold('d', 3.7)
+        hold('s', 0.5)
+        hold('a', 0.5)
+        time.sleep(0.3)
+
+        for slot in range(6):
+            text = image_to_string(ImageGrab.grab(bbox=(1018, 45, 1295, 100)).convert('L'))
+            if 'Claim Hive' in text:
+                pag.press('e')
+                return slot + 1
+            elif slot == 5:
+                break
+            hold('a', 1.3)
+            time.sleep(0.3)
+
+        reset()
+    exit()
+
+def checkReconnect():
+    if ImageGrab.grab(bbox=(1100, 570, 1101, 571)).getpixel((0,0))[:3] == (57,59,61):
+        print('Disconnected')
+        if 'Reconnect' in image_to_string(ImageGrab.grab(bbox=(1175, 710, 1250, 725)).convert('L')):
+            print('Clicked Reconnect')
+            mouse.position = (1200, 715)
+            time.sleep(0.1)
+            mouse.click(Button.left, 1)
+        else:
+            print('Reconnect Not Found')
+            exit()
+
+        time.sleep(10)
+        waitTime = 5
+        while ImageGrab.grab(bbox=(1100, 570, 1101, 571)).getpixel((0,0))[:3] == (57,59,61):
+            time.sleep(waitTime)
+            print('Current Wait Time:', waitTime)
+            waitTime*2
+        
+        print('Loading')
+
+        waitTime = 10
+        while (200,80,75) <= ImageGrab.grab(bbox=(2215, 155, 2216, 156)).getpixel((0,0))[:3] <= (205,87,80):
+            print(ImageGrab.grab(bbox=(2145, 115, 2146, 116)).getpixel((0,0))[:3])
+            time.sleep(waitTime)
+            print('Current Wait Time:', waitTime)
+            waitTime*2
+
+        print('Rejoined Successfully')
+        return True
+    return False
