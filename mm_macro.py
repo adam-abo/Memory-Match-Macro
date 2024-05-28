@@ -31,7 +31,7 @@ def macro():
                             break
                         elif status == 2:
                             games[key] += 1
-                            cooldowns[key] = cd + (time.time() - t) # alternate: add time to type when walking to it?
+                            cooldowns[key] = cd + (time.time() - t)
                             collected = itemSummary.identify(memory_match.solve(key), collected)
                             break
                     print(cooldowns)

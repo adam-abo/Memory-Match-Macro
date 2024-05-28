@@ -80,10 +80,10 @@ def reset():
             time.sleep(8.5)
 
             text = image_to_string(ImageGrab.grab(bbox=(1018, 45, 1295, 100)).convert('L'))
-            if 'Make Honey' in text or 'Flower Fields' in text:
+            if 'Make Honey' in text or 'rom Flower' in text:
                 if 'Make Honey' in text:
                     pag.press('e')
-                    while 'Flower Fields' not in text:
+                    while 'rom Flower' not in text:
                         time.sleep(3)
                         text = image_to_string(ImageGrab.grab(bbox=(1018, 45, 1295, 100)).convert('L'))
                     time.sleep(3)
@@ -262,17 +262,21 @@ def walkToNight():
     hold('a', 0.3)
     hold('s', 0.5)
     hold('a', 1.5)
-    hold('s', 6)
+    hold('s', 3)
+    for _ in range(60):
+        hold('s', 0.05)
+        time.sleep(0.05)
     multiHold('sa', 4)
-    hold('a', 0.3)
+    hold('a', 0.25)
     pag.press(',')
+    
     # Moon Jumps
     jump('w', 1)
     jump('w', 1)
     pag.press('.')
     jump('w', 0.8)
     multiHold('aw', 0.25)
-    hold('w', 0.2)
+    hold('w', 0.1)
     jump('w', 1)
     pag.press('.')
     hold('w', 0.2)
@@ -288,7 +292,7 @@ def walkToNight():
     jump('w', 0.8)
     pag.press('.')
     hold('w', 0.3)
-    hold('d', 0.1)
+    hold('d', 0.2)
     keyboard.press('w')
     jump('d', 0.3)
     time.sleep(0.5)
@@ -340,16 +344,16 @@ def hiveSlot():
         hold('d', 7.4)
         hold('s', 0.5)
         hold('a', 0.5)
-        time.sleep(0.3)
+        time.sleep(0.5)
 
         for slot in range(6):
             text = image_to_string(ImageGrab.grab(bbox=(1018, 45, 1295, 100)).convert('L'))
-            if 'Make Honey' in text or 'Flower Fields' in text:
+            if 'Make Honey' in text or 'rom Flower' in text:
                 return slot + 1
             elif slot == 5:
                 break
             hold('a', 1.3)
-            time.sleep(0.3)
+            time.sleep(0.5)
     return 6
 
 def claimHive():
@@ -404,3 +408,6 @@ def checkReconnect():
         print('Rejoined Successfully')
         return True
     return False
+
+#time.sleep(2)
+#walkToNight()
