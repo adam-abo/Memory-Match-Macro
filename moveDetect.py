@@ -272,9 +272,9 @@ def walkToNight():
     
     # Moon Jumps
     jump('w', 1)
-    jump('w', 1)
+    jump('w', 0.95)
     pag.press('.')
-    jump('w', 0.8)
+    jump('w', 0.7)# here
     multiHold('aw', 0.25)
     hold('w', 0.1)
     jump('w', 1)
@@ -289,6 +289,7 @@ def walkToNight():
     time.sleep(0.5)
     keyboard.release('w')
     jump('w', 0.8)
+    hold('d', 0.2)
     jump('w', 0.8)
     pag.press('.')
     hold('w', 0.3)
@@ -352,6 +353,8 @@ def hiveSlot():
                 return slot + 1
             elif slot == 5:
                 break
+            else:
+                print(text)
             hold('a', 1.3)
             time.sleep(0.5)
     return 6
@@ -409,5 +412,18 @@ def checkReconnect():
         return True
     return False
 
-#time.sleep(2)
-#walkToNight()
+"""time.sleep(2)
+reset()
+trials = 0
+sucesses = 0
+try:
+    while True:
+        if detectNight():
+            trials += 1
+            if walkToMatch('Night', 4) == 1:
+                sucesses +=1
+            reset()
+            time.sleep(1000)
+        time.sleep(10)
+except KeyboardInterrupt:
+    print(trials, sucesses)"""

@@ -7,7 +7,7 @@ import pyautogui as pag
 def macro():
     time.sleep(3)
     collected = {}
-    cooldowns = {'Regular':0, 'Mega':0, 'Extreme':0, 'Night':0}# 'Winter':0}
+    cooldowns = {'Regular':0, 'Mega':0, 'Extreme':0}#, 'Night':0} 'Winter':0}
     games = {'Regular':0, 'Mega':0, 'Extreme':0, 'Night':0, 'Winter':0}
     itemSummary.clearFolder()
     t = t1 = time.time()
