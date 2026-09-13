@@ -94,7 +94,7 @@ def save_board(initialPos, final_pix):
     counter = 1
     name = 'board'
     nameC = f"{name}_{counter}"
-    path = "/Users/adamabouelela/Desktop/Memory-Match-Macro/Boards/"
+    path = "/XXX/Memory-Match-Macro/Boards/"  # Replace XXX with project directory
 
     while os.path.exists(os.path.join(path, nameC + '.png')):
         nameC = f"{name}_{counter}"
