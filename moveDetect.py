@@ -199,7 +199,7 @@ def walkToRegular():
                 return getCD('Regular')
         hold('w', 0.25)
         time.sleep(0.5)
-    ImageGrab.grab().save("/Users/adamabouelela/Desktop/Regular"+str(random.randint(0,10000))+".png")
+    ImageGrab.grab().save("/XXX/Regular"+str(random.randint(0,10000))+".png") # Replace XXX with desired directory
     return 0, 0
 
 def walkToMega():
@@ -222,7 +222,7 @@ def walkToMega():
                 return getCD('Mega')
         hold('d', 0.25)
         time.sleep(0.5)
-    ImageGrab.grab().save("/Users/adamabouelela/Desktop/Mega"+str(random.randint(0,10000))+".png")
+    ImageGrab.grab().save("/XXX/Mega"+str(random.randint(0,10000))+".png") # Replace XXX with desired directory
     return 0, 0
 
 def walkToExtreme():
@@ -250,7 +250,7 @@ def walkToExtreme():
                 return getCD('Extreme')
         hold('d', 0.25)
         time.sleep(0.5)
-    ImageGrab.grab().save("/Users/adamabouelela/Desktop/Extreme"+str(random.randint(0,10000))+".png")
+    ImageGrab.grab().save("/XXX/Extreme"+str(random.randint(0,10000))+".png") # Replace XXX with desired directory
     return 0, 0
 
 def walkToNight():
@@ -314,7 +314,7 @@ def walkToNight():
                 return getCD('Night')
         hold('w', 0.25)
         time.sleep(0.5)
-    ImageGrab.grab().save("/Users/adamabouelela/Desktop/Night"+str(random.randint(0,10000))+".png")
+    ImageGrab.grab().save("/XXX/Night"+str(random.randint(0,10000))+".png") # Replace XXX with desired directory
     return 0, 0
 
 def getCD(type):
@@ -334,7 +334,7 @@ def getCD(type):
             else:
                 multi = multi*10
         if secs < defaults[type]:
-            #ImageGrab.grab().save("/Users/adamabouelela/Desktop/CD"+str(random.randint(0,10000))+".png")
+            #ImageGrab.grab().save("/XXX/CD"+str(random.randint(0,10000))+".png")
             return 1, secs
     return 2, defaults[type]
 
