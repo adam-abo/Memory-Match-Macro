@@ -1,7 +1,7 @@
 ## TLDR:
 This is a project I made to automate farming Memory Match boards efficiently in BSS using Python. Currently, the code was designed with my iMac's specifications in mind, but it could be adapted to work on other Mac devices.
 ## Motivation:
-It was initially made when a rare reward was added to be given for the players with highest number of matches daily. Several macros were already being used in BSS for varying goals, but none had the ability to automate Memory Match games. Additionally, macros for Mac devices had been largely lacking compared to on devices running Windows. Due to these reasons, I saw an opportunity to become the only player on a game with 100k+ players peak players with the ability to farm Memory Matches to hit the top rankings on the leaderboards consistently for the rewards.
+It was initially made when a rare reward was added to be given for the players with highest number of matches daily. Several macros were already being used in BSS for varying goals, but none had the ability to automate Memory Match games. Additionally, macros for Mac devices had been largely lacking compared to on devices running Windows. Due to these reasons, I saw an opportunity to become the only player on a game with 100k+ players peak players with the ability to farm Memory Matches to hit the top rankings on the leaderboards consistently for the rewards. This project taught me a lot about how to analyze, implement, and consider the drawbacks of different types of computer vision and simulated input methods. It was also my first real experience using Git/Github.
 ## What can the macro do?
 * Navigate to each Memory Match board type.
 * Perfectly play out each game to maximize the number of matches.
